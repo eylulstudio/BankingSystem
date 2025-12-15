@@ -1,6 +1,7 @@
 package com.bank;
 
-public class Account {
+public abstract class Account {
+
     protected String accountNumber;
     protected double balance;
 
@@ -15,12 +16,7 @@ public class Account {
         }
     }
 
-    
-    public void withdraw(double amount) {
-        if (amount > 0 && amount <= balance) {
-            balance -= amount;
-        }
-    }
+    public abstract void withdraw(double amount);
 
     public double getBalance() {
         return balance;
