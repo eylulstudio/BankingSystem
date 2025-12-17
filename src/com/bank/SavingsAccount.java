@@ -7,9 +7,11 @@ public class SavingsAccount extends Account {
     }
 
     @Override
-    public void withdraw(double amount) {
-        if (amount > 0 && amount <= balance) {
-            balance -= amount;
+    public boolean withdraw(double amount) {
+        if (amount > 0 && amount <= getBalance()) {
+            setBalance(getBalance() - amount);
+            return true;
         }
+        return false;
     }
 }
