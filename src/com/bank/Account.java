@@ -3,7 +3,7 @@ package com.bank;
 public abstract class Account {
 
     protected String accountNumber;
-    protected double balance;
+    private double balance;
 
     public Account(String accountNumber, double balance) {
         this.accountNumber = accountNumber;
@@ -16,10 +16,14 @@ public abstract class Account {
         }
     }
 
-    public abstract void withdraw(double amount);
+    public abstract boolean withdraw(double amount);
 
     public double getBalance() {
         return balance;
+    }
+    
+    protected void setBalance(double balance) {
+    	this.balance=balance;
     }
 
     public String getAccountNumber() {
