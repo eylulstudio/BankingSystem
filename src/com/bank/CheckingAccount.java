@@ -15,8 +15,9 @@ public class CheckingAccount extends Account {
 
     @Override
     public boolean withdraw(double amount) {
-        if (amount > 0 && getBalance() + overdraftLimit >= amount) {
+        if (amount > 0 && amount <= getBalance() + overdraftLimit) {
             setBalance(getBalance() - amount);
+            transactions.add(new Transaction("Withdraw", amount));
             return true;
         }
         return false;
