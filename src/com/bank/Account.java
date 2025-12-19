@@ -1,6 +1,6 @@
 package com.bank;
 
-public abstract class Account {
+public abstract class Account implements Transferable {
 
     protected String accountNumber;
     private double balance;
@@ -17,6 +17,14 @@ public abstract class Account {
     }
 
     public abstract boolean withdraw(double amount);
+    
+    @Override
+    public void transfer(Account target, double amount) {
+        if (withdraw(amount)) {
+            target.deposit(amount);
+        }
+    }
+
 
     public double getBalance() {
         return balance;
