@@ -27,7 +27,10 @@ public abstract class Account implements Transferable {
     @Override
     public void transfer(Account target, double amount) {
         if (withdraw(amount)) {
+            transactions.add(new Transaction("Transfer Out", amount));
+
             target.deposit(amount);
+            target.transactions.add(new Transaction("Transfer In", amount));
         }
     }
 
