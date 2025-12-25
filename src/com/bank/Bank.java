@@ -38,4 +38,17 @@ public class Bank {
     public String getName() {
         return name;
     }
+    
+    
+    public void printMonthlyReport(Account account) {
+        System.out.println("=== Monthly Report ===");
+        System.out.println("Account Number: " + account.getAccountNumber());
+
+        for (Transaction t : account.getTransactions()) {
+            System.out.println(t);
+        }
+
+        System.out.println("Current Balance: " + account.getBalance());
+    }
+
 }
