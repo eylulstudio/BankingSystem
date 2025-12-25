@@ -58,7 +58,10 @@ public class Main {
 
                 case 4:
                     System.out.println("\n--- Savings Account Transactions ---");
-                    savings.printTransactions();
+                    for (Transaction t : savings.getTransactions()) {
+                        System.out.println(t);
+                    }
+
                     break;
 
                 case 5:
