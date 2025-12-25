@@ -51,4 +51,8 @@ public abstract class Account implements Transferable {
     public String getAccountNumber() {
         return accountNumber;
     }
+    public java.util.List<Transaction> getTransactions() {
+        return transactions;
+    }
+
 }
