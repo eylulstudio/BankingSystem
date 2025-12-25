@@ -26,6 +26,7 @@ public class Main {
             System.out.println("3 - Transfer");
             System.out.println("4 - View Transactions");
             System.out.println("5 - View Balances");
+            System.out.println("6 - Monthly Report");
             System.out.println("0 - Exit");
 
             int choice = scanner.nextInt();
@@ -68,6 +69,11 @@ public class Main {
                     System.out.println("\n--- Account Balances ---");
                     bank.printAllAccounts();
                     break;
+                    
+                case 6:
+                    bank.printMonthlyReport(savings);
+                    break;
+
 
                 case 0:
                     running = false;
