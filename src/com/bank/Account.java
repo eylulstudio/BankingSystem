@@ -2,17 +2,19 @@ package com.bank;
 
 import java.util.ArrayList;
 import java.util.List;
-
 public abstract class Account implements Transferable {
 
     protected String accountNumber;
     private double balance;
+    
     protected List<Transaction> transactions;
+    protected List<Loan> loans;
 
     public Account(String accountNumber, double balance) {
         this.accountNumber = accountNumber;
         this.balance = balance;
         this.transactions = new ArrayList<>();
+        this.loans = new ArrayList<>();
     }
 
     public void deposit(double amount) {
@@ -37,6 +39,20 @@ public abstract class Account implements Transferable {
     public void printTransactions() {
         for (Transaction t : transactions) {
             System.out.println(t);
+        }
+    }
+    public void addLoan(Loan loan) {
+        loans.add(loan);
+    }
+
+    public void printLoans() {
+        if (loans.isEmpty()) {
+            System.out.println("No active loans.");
+            return;
+        }
+
+        for (Loan loan : loans) {
+            System.out.println("Remaining debt: " + loan.getRemainingDebt());
         }
     }
 
