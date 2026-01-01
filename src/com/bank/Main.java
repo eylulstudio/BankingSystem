@@ -27,6 +27,7 @@ public class Main {
             System.out.println("4 - View Transactions");
             System.out.println("5 - View Balances");
             System.out.println("6 - Monthly Report");
+            System.out.println("7 - Take Loan");
             System.out.println("0 - Exit");
 
             int choice = scanner.nextInt();
@@ -73,7 +74,15 @@ public class Main {
                 case 6:
                     bank.printMonthlyReport(savings);
                     break;
+                case 7:
+                    System.out.print("Enter loan amount: ");
+                    double loanAmount = scanner.nextDouble();
 
+                    Loan loan = new Loan("LOO1", loanAmount);
+                    savings.takeLoan(loan);
+                    
+                    System.out.println("Loan successfully created.");
+                    break;
 
                 case 0:
                     running = false;
@@ -84,7 +93,11 @@ public class Main {
                     System.out.println("Invalid choice.");
             }
         }
-
+                     
         scanner.close();
-    }
-}
+        }
+     }
+        
+            
+    
+
