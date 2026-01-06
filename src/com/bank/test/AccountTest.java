@@ -1,54 +1,115 @@
 package com.bank.test;
 
-import com.bank.Account;
-import com.bank.SavingsAccount;
+import com.bank.*;
 import static org.junit.jupiter.api.Assertions.*;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 class AccountTest {
 
-    private Account from;
-    private Account to;
+    private SavingsAccount savings;
+    private CheckingAccount checking;
 
     @BeforeEach
     void setUp() {
-        from = new SavingsAccount("A-1", 1000);
-        to = new SavingsAccount("A-2", 500);
+        savings = new SavingsAccount("SA1", 1000);
+        checking = new CheckingAccount("CA1", 500, 300);
     }
 
+    // ---------- Deposit ----------
     @Test
     void deposit_shouldIncreaseBalance() {
-        from.deposit(300);
-
-        assertEquals(1300, from.getBalance());
+        savings.deposit(500);
+        assertEquals(1500, savings.getBalance());
     }
 
     @Test
-    void transfer_withSufficientBalance_shouldReturnTrue() {
-        boolean result = from.transfer(to, 400);
+    void deposit_negativeAmount_shouldNotChangeBalance() {
+        savings.deposit(-100);
+        assertEquals(1000, savings.getBalance());
+    }
 
-        assertTrue(result);
-        assertEquals(600, from.getBalance());
-        assertEquals(900, to.getBalance());
+    // ---------- Withdraw ----------
+    @Test
+    void withdraw_savingsSufficientBalance_shouldReturnTrue() {
+        assertTrue(savings.withdraw(500));
+        assertEquals(500, savings.getBalance());
     }
 
     @Test
-    void transfer_withInsufficientBalance_shouldReturnFalse() {
-        boolean result = from.transfer(to, 2000);
+    void withdraw_savingsInsufficientBalance_shouldReturnFalse() {
+        assertFalse(savings.withdraw(1500));
+        assertEquals(1000, savings.getBalance());
+    }
 
-        assertFalse(result);
-        assertEquals(1000, from.getBalance());
-        assertEquals(500, to.getBalance());
+    @Test
+    void withdraw_checkingWithinOverdraft_shouldReturnTrue() {
+        assertTrue(checking.withdraw(700)); 
+        assertEquals(-200, checking.getBalance());
+    }
+
+    @Test
+    void withdraw_checkingExceedOverdraft_shouldReturnFalse() {
+        assertFalse(checking.withdraw(900));
+        assertEquals(500, checking.getBalance());
+    }
+
+    // ---------- Transfer ----------
+    @Test
+    void transfer_sufficientBalance_shouldReturnTrue() {
+        assertTrue(savings.transfer(checking, 400));
+        assertEquals(600, savings.getBalance());
+        assertEquals(900, checking.getBalance());
+    }
+
+    @Test
+    void transfer_insufficientBalance_shouldReturnFalse() {
+        assertFalse(savings.transfer(checking, 2000));
+        assertEquals(1000, savings.getBalance());
+        assertEquals(500, checking.getBalance());
     }
 
     @Test
     void transfer_shouldCreateTransactions() {
-        from.transfer(to, 200);
+        savings.transfer(checking, 200);
+        assertEquals(2, savings.getTransactions().size());
+        assertEquals(2, checking.getTransactions().size()); 
+    }
 
-        assertEquals(2, from.getTransactions().size());
-        assertEquals(2, to.getTransactions().size());
+    // ---------- Loan ----------
+    @Test
+    void takeLoan_shouldIncreaseBalanceAndTransactions() {
+        Loan loan = new Loan("L001", 500);
+        savings.takeLoan(loan);
+        assertEquals(1500, savings.getBalance(), 0.01); 
+        assertEquals(2, savings.getTransactions().size());
+        assertEquals(1, savings.getLoans().size());
+    }
+
+    @Test
+    void payLoan_validAmount_shouldDecreaseDebtAndBalance() {
+        Loan loan = new Loan("L002", 500);
+        savings.takeLoan(loan);
+        boolean paid = savings.payLoan("L002", 100);
+        assertTrue(paid);
+        assertEquals(450, loan.getRemainingDebt(), 0.01); 
+        assertEquals(1000 + 500 - 100, savings.getBalance(), 0.01); 
+    }
+
+    @Test
+    void payLoan_overAmount_shouldReturnFalse() {
+        Loan loan = new Loan("L003", 500);
+        savings.takeLoan(loan);
+        boolean paid = savings.payLoan("L003", 2000); 
+        assertFalse(paid);
+    }
+
+    @Test
+    void payLoan_insufficientBalance_shouldReturnFalse() {
+        Loan loan = new Loan("L004", 1000);
+        savings.takeLoan(loan);
+        boolean paid = savings.payLoan("L004", 2000); 
+        assertFalse(paid);
     }
 
 }

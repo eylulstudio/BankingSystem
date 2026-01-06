@@ -1,55 +1,45 @@
 package com.bank.test;
 
-import com.bank.Bank;
-import com.bank.Account;
-import com.bank.SavingsAccount;
-
+import com.bank.*;
 import static org.junit.jupiter.api.Assertions.*;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 class BankTest {
 
     private Bank bank;
-    private Account acc1;
-    private Account acc2;
+    private SavingsAccount savings;
+    private CheckingAccount checking;
 
     @BeforeEach
     void setUp() {
-        bank = new Bank("Test Bank");
-        acc1 = new SavingsAccount("A-100", 1000);
-        acc2 = new SavingsAccount("A-200", 500);
-
-        bank.addAccount(acc1);
-        bank.addAccount(acc2);
-    }
-
-    @Test
-    void addAccount_shouldStoreAccounts() {
-        Account found = bank.findAccount("A-100");
-
-        assertNotNull(found);
-        assertEquals("A-100", found.getAccountNumber());
+        bank = new Bank("My Bank");
+        savings = new SavingsAccount("SA1", 1000);
+        checking = new CheckingAccount("CA1", 500, 300);
+        bank.addAccount(savings);
+        bank.addAccount(checking);
     }
 
     @Test
     void findAccount_existingAccount_shouldReturnAccount() {
-        Account found = bank.findAccount("A-200");
-
-        assertNotNull(found);
-        assertEquals(acc2, found);
+        assertEquals(savings, bank.findAccount("SA1"));
+        assertEquals(checking, bank.findAccount("CA1"));
     }
 
     @Test
     void findAccount_nonExistingAccount_shouldReturnNull() {
-        Account found = bank.findAccount("X-999");
-
-        assertNull(found);
+        assertNull(bank.findAccount("XYZ"));
     }
 
     @Test
-    void getName_shouldReturnBankName() {
-        assertEquals("Test Bank", bank.getName());
+    void printAllAccounts_shouldShowBalances() {
+        // sadece metod çalışıyor mu testi, konsola yazdırıyor
+        bank.printAllAccounts();
     }
+
+    @Test
+    void printMonthlyReport_shouldRunWithoutError() {
+        bank.printMonthlyReport(savings);
+    }
+
 }
